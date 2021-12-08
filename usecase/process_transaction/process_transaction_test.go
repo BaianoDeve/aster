@@ -85,9 +85,9 @@ func TestProcessTransaction_ExecuteRejectedTransaction(t *testing.T) {
 
 	producerMock := mock_broker.NewMockProducerInterface(ctrl)
 	producerMock.EXPECT().
-		Publish(expectedOutput, []byte(input.ID), "transaction_result")
+		Publish(expectedOutput, []byte(input.ID), "transactions_result")
 
-	usecase := NewProcessTransaction(repositoryMock, producerMock, "transaction_result")
+	usecase := NewProcessTransaction(repositoryMock, producerMock, "transactions_result")
 
 	output, err := usecase.Execute(input)
 
@@ -104,7 +104,7 @@ func TestProcessTransaction_ExecuteApprovedTransaction(t *testing.T) {
 		CreditCardExpirationMonth: 12,
 		CreditCardExpirationYear:  time.Now().Year(),
 		CreditCardCVV:             123,
-		Amount:                    900,
+		Amount:                    300,
 	}
 
 	expectedOutput := TransactionDtoOutput{
@@ -127,9 +127,9 @@ func TestProcessTransaction_ExecuteApprovedTransaction(t *testing.T) {
 
 	producerMock := mock_broker.NewMockProducerInterface(ctrl)
 	producerMock.EXPECT().
-		Publish(expectedOutput, []byte(input.ID), "transaction_result")
+		Publish(expectedOutput, []byte(input.ID), "transactions_result")
 
-	usecase := NewProcessTransaction(repositoryMock, producerMock, "transaction_result")
+	usecase := NewProcessTransaction(repositoryMock, producerMock, "transactions_result")
 
 	output, err := usecase.Execute(input)
 
