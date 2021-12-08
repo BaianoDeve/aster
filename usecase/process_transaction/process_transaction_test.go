@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	mock_broker "github.com/BaianoDeve/aster/adapter/broker/mock"
 	"github.com/BaianoDeve/aster/domain/entity"
 	mock_repository "github.com/BaianoDeve/aster/domain/repository/mock"
 	"github.com/golang/mock/gomock"
@@ -40,7 +41,11 @@ func TestProcessTransaction_ExecuteInvalidCreditCard(t *testing.T) {
 			expectedOutput.ErrorMessage,
 		).Return(nil)
 
-	usecase := NewProcessTransaction(repositoryMock)
+	producerMock := mock_broker.NewMockProducerInterface(ctrl)
+	producerMock.EXPECT().
+		Publish(expectedOutput, []byte(input.ID), "transaction_result")
+
+	usecase := NewProcessTransaction(repositoryMock, producerMock, "transaction_result")
 
 	output, err := usecase.Execute(input)
 
@@ -78,7 +83,11 @@ func TestProcessTransaction_ExecuteRejectedTransaction(t *testing.T) {
 			expectedOutput.ErrorMessage,
 		).Return(nil)
 
-	usecase := NewProcessTransaction(repositoryMock)
+	producerMock := mock_broker.NewMockProducerInterface(ctrl)
+	producerMock.EXPECT().
+		Publish(expectedOutput, []byte(input.ID), "transaction_result")
+
+	usecase := NewProcessTransaction(repositoryMock, producerMock, "transaction_result")
 
 	output, err := usecase.Execute(input)
 
@@ -116,7 +125,11 @@ func TestProcessTransaction_ExecuteApprovedTransaction(t *testing.T) {
 			expectedOutput.ErrorMessage,
 		).Return(nil)
 
-	usecase := NewProcessTransaction(repositoryMock)
+	producerMock := mock_broker.NewMockProducerInterface(ctrl)
+	producerMock.EXPECT().
+		Publish(expectedOutput, []byte(input.ID), "transaction_result")
+
+	usecase := NewProcessTransaction(repositoryMock, producerMock, "transaction_result")
 
 	output, err := usecase.Execute(input)
 
